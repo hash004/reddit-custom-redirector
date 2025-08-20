@@ -1,8 +1,13 @@
 // Background script to initialize the extension
-const DEFAULT_URL = 'reddit.hashweb.dev';
+const DEFAULT_URL = 'old.reddit.com';
 
 // Initialize extension on install
 chrome.runtime.onInstalled.addListener(async () => {
+    // Disable static rule resource to prevent conflicts
+    await chrome.declarativeNetRequest.updateEnabledRulesets({
+        disableRulesetIds: ['reddit_redirect_rules']
+    });
+    
     // Set default configuration
     await chrome.storage.sync.set({ customUrl: DEFAULT_URL });
     
@@ -21,9 +26,13 @@ chrome.storage.onChanged.addListener(async (changes, namespace) => {
 // Update the declarative net request rule
 async function updateRedirectRule(customUrl) {
     try {
-        // Add new rule with updated URL and unique ID
+        // Remove all existing dynamic rules first
+        const existingRules = await chrome.declarativeNetRequest.getDynamicRules();
+        const ruleIds = existingRules.map(rule => rule.id);
+        
+        // Create new rule with updated URL
         const newRule = {
-            id: Math.floor(Math.random() * 1000000) + 1,
+            id: 1,
             priority: 1,
             action: {
                 type: 'redirect',
@@ -38,6 +47,7 @@ async function updateRedirectRule(customUrl) {
         };
         
         await chrome.declarativeNetRequest.updateDynamicRules({
+            removeRuleIds: ruleIds,
             addRules: [newRule]
         });
         

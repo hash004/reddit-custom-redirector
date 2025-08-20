@@ -1,6 +1,5 @@
 // Default configuration
-const DEFAULT_URL = 'reddit.hashweb.dev';
-const RULE_ID = 1;
+const DEFAULT_URL = 'old.reddit.com';
 
 // DOM elements
 const customUrlInput = document.getElementById('customUrl');
@@ -33,7 +32,6 @@ saveBtn.addEventListener('click', async () => {
     
     try {
         await saveConfig({ customUrl });
-        await updateRedirectRule(customUrl);
         currentUrlSpan.textContent = customUrl;
         showMessage('Settings saved successfully!', 'success');
     } catch (error) {
@@ -46,7 +44,6 @@ saveBtn.addEventListener('click', async () => {
 resetBtn.addEventListener('click', async () => {
     try {
         await saveConfig({ customUrl: DEFAULT_URL });
-        await updateRedirectRule(DEFAULT_URL);
         customUrlInput.value = DEFAULT_URL;
         currentUrlSpan.textContent = DEFAULT_URL;
         showMessage('Settings reset to default', 'success');
@@ -72,33 +69,6 @@ async function saveConfig(config) {
     return chrome.storage.sync.set(config);
 }
 
-// Update the declarative net request rule
-async function updateRedirectRule(customUrl) {
-    // Remove existing rule
-    await chrome.declarativeNetRequest.updateDynamicRules({
-        removeRuleIds: [RULE_ID]
-    });
-    
-    // Add new rule with updated URL
-    const newRule = {
-        id: RULE_ID,
-        priority: 1,
-        action: {
-            type: 'redirect',
-            redirect: {
-                regexSubstitution: `https://${customUrl}\\1`
-            }
-        },
-        condition: {
-            regexFilter: '^https?://(?:www\\.)?reddit\\.com(.*)',
-            resourceTypes: ['main_frame']
-        }
-    };
-    
-    await chrome.declarativeNetRequest.updateDynamicRules({
-        addRules: [newRule]
-    });
-}
 
 // Basic URL validation
 function isValidUrl(url) {
