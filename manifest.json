@@ -13,15 +13,6 @@
     "*://reddit.com/*",
     "*://www.reddit.com/*"
   ],
-  "declarative_net_request": {
-    "rule_resources": [
-      {
-        "id": "reddit_redirect_rules",
-        "enabled": true,
-        "path": "rules.json"
-      }
-    ]
-  },
   "icons": {
     "32": "icons/icon32.png",
     "48": "icons/icon48.png",

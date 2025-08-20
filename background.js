@@ -3,11 +3,6 @@ const DEFAULT_URL = 'old.reddit.com';
 
 // Initialize extension on install
 chrome.runtime.onInstalled.addListener(async () => {
-    // Disable static rule resource to prevent conflicts
-    await chrome.declarativeNetRequest.updateEnabledRulesets({
-        disableRulesetIds: ['reddit_redirect_rules']
-    });
-    
     // Set default configuration
     await chrome.storage.sync.set({ 
         customUrl: DEFAULT_URL, 
