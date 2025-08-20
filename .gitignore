@@ -1,1 +1,5 @@
+# Browser extension generated files
+_metadata/
+
+# macOS system files
 .DS_Store
