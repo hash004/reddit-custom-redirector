@@ -5,10 +5,12 @@ A Chrome extension that automatically redirects Reddit links to your preferred c
 ## Features
 
 - ✅ Automatically redirect reddit.com to your custom domain
+- ✅ **Easy toggle to enable/disable redirects** with visual feedback
 - ✅ Configurable redirect URL through popup interface
 - ✅ Works with alternative Reddit frontends (old.reddit.com, libreddit instances, etc.)
 - ✅ Preserves all URL paths and parameters
-- ✅ Simple and clean interface
+- ✅ **Extension badge shows enabled/disabled status**
+- ✅ Simple and clean interface with modern toggle switch
 
 ## Installation
 
@@ -27,9 +29,15 @@ A Chrome extension that automatically redirects Reddit links to your preferred c
 ## Usage
 
 1. Click the extension icon in your Chrome toolbar
-2. Enter your preferred Reddit domain (e.g., `old.reddit.com`, `libreddit.example.com`)
-3. Click "Save"
-4. All reddit.com links will now redirect to your custom domain
+2. **Toggle the "Enable Redirects" switch** to turn redirects on/off
+3. Enter your preferred Reddit domain (e.g., `old.reddit.com`, `libreddit.example.com`)
+4. Click "Save"
+5. All reddit.com links will now redirect to your custom domain
+
+### Quick Controls
+- **Extension Badge**: Shows "OFF" when disabled, no badge when active
+- **Toggle Switch**: Instantly enable/disable redirects without changing your URL
+- **Visual Status**: Clear "Active" or "Disabled" status in the popup
 
 ## Supported Use Cases
 
