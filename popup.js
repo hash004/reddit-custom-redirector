@@ -7,12 +7,32 @@ const currentUrlSpan = document.getElementById('currentUrl');
 const saveBtn = document.getElementById('saveBtn');
 const resetBtn = document.getElementById('resetBtn');
 const messageDiv = document.getElementById('message');
+const enableToggle = document.getElementById('enableToggle');
+const statusText = document.getElementById('statusText');
+const configSection = document.getElementById('configSection');
 
 // Load current configuration on popup open
 document.addEventListener('DOMContentLoaded', async () => {
     const config = await loadConfig();
     customUrlInput.value = config.customUrl;
     currentUrlSpan.textContent = config.customUrl;
+    enableToggle.checked = config.enabled !== false; // Default to true if not set
+    updateToggleUI(enableToggle.checked);
+});
+
+// Toggle switch handler
+enableToggle.addEventListener('change', async () => {
+    const enabled = enableToggle.checked;
+    try {
+        await saveConfig({ enabled });
+        updateToggleUI(enabled);
+        showMessage(`Redirects ${enabled ? 'enabled' : 'disabled'}`, 'success');
+    } catch (error) {
+        console.error('Error updating enabled state:', error);
+        showMessage('Error updating settings', 'error');
+        // Revert toggle on error
+        enableToggle.checked = !enabled;
+    }
 });
 
 // Save button handler
@@ -56,17 +76,33 @@ resetBtn.addEventListener('click', async () => {
 // Load configuration from storage
 async function loadConfig() {
     try {
-        const result = await chrome.storage.sync.get({ customUrl: DEFAULT_URL });
+        const result = await chrome.storage.sync.get({ 
+            customUrl: DEFAULT_URL, 
+            enabled: true 
+        });
         return result;
     } catch (error) {
         console.error('Error loading config:', error);
-        return { customUrl: DEFAULT_URL };
+        return { customUrl: DEFAULT_URL, enabled: true };
     }
 }
 
 // Save configuration to storage
 async function saveConfig(config) {
     return chrome.storage.sync.set(config);
+}
+
+// Update toggle UI based on enabled state
+function updateToggleUI(enabled) {
+    if (enabled) {
+        statusText.textContent = 'Active';
+        statusText.className = 'status-text status-enabled';
+        configSection.classList.remove('disabled');
+    } else {
+        statusText.textContent = 'Disabled';
+        statusText.className = 'status-text status-disabled';
+        configSection.classList.add('disabled');
+    }
 }
 
 
