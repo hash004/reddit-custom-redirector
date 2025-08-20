@@ -3,3 +3,9 @@ _metadata/
 
 # macOS system files
 .DS_Store
+
+# Temporary files
+*.tmp
+
+# Development files
+create_icons.html
